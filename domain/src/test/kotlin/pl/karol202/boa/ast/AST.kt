@@ -1,5 +1,7 @@
 package pl.karol202.boa.ast
 
+import pl.karol202.boa.syntax.OperatorType
+
 /*
 val line = readLine()
 var number = parseInt(line)
@@ -18,7 +20,7 @@ val testAST = FileNode(statements = listOf(
 				                                    IdentifierNode("line")
 		                                    ))),
 		AssignmentNode(target = IdentifierNode("number"),
-		               value = InvocationNode(target = OperatorNode(Operator.PLUS),
+		               value = InvocationNode(target = OperatorNode(OperatorType.PLUS),
 		                                      parameters = listOf(
 				                                      IdentifierNode("number"),
 				                                      LiteralNode.IntegerLiteral(1)

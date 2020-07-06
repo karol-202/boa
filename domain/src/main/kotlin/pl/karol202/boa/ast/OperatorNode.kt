@@ -1,12 +1,5 @@
 package pl.karol202.boa.ast
 
-enum class Operator
-{
-	UNARY_PLUS,
-	UNARY_MINUS,
+import pl.karol202.boa.syntax.OperatorType
 
-	PLUS,
-	MINUS
-}
-
-data class OperatorNode(val operator: Operator) : InvocableNode
+data class OperatorNode(val type: OperatorType) : InvocableNode

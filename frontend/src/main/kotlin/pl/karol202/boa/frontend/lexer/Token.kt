@@ -31,4 +31,6 @@ sealed class Token
 	object Comma : Token()
 
 	object Newline : Token()
+
+	data class Invalid(val value: String) : Token()
 }

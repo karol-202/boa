@@ -8,8 +8,10 @@ data class LexerRule(val matcher: (LexerState, Char) -> Boolean,
         fun simple(matchState: LexerState.() -> Boolean = { true },
                    matchChar: (Char) -> Boolean = { true },
                    action: LexerState.(Char) -> LexerState) =
-            LexerRule(matcher = { state, char -> state.matchState() && matchChar(char) },
-                      action = { state, char -> state.action(char) })
+            LexerRule(
+                matcher = { state, char -> state.matchState() && matchChar(char) },
+                action = { state, char -> state.action(char) }
+            )
 
         fun onPendingToken(matchToken: LexerState.PendingToken.() -> Boolean = { true },
                            matchChar: (Char) -> Boolean = { true },
@@ -20,6 +22,7 @@ data class LexerRule(val matcher: (LexerState, Char) -> Boolean,
                 },
                 action = { state, char ->
                     state.action(char, state.pendingToken ?: throw IllegalStateException("No pending token"))
-                })
+                }
+            )
     }
 }

@@ -1,8 +1,11 @@
 package pl.karol202.boa.frontend.lexer
 
+import pl.karol202.boa.Issue
+
 data class LexerState(val tokens: List<Token> = emptyList(),
                       val pendingToken: PendingToken? = null,
-                      val lineNumber: Int = 1)
+                      val lineNumber: Int = 1,
+                      val issues: List<Issue> = emptyList())
 {
 	data class PendingToken(val value: String)
 	{
@@ -12,7 +15,8 @@ data class LexerState(val tokens: List<Token> = emptyList(),
 		val isMultiLineComment get() = value.startsWith("/*")
 		val isComment get() = isSingleLineComment || isMultiLineComment
 		val isCommentStartMarker get() = value.singleOrNull()?.equals('/') ?: false
-		val endsWithAsterisk get() = value.endsWith('*')
+
+		constructor(firstChar: Char) : this(firstChar.toString())
 
 		fun charAppended(char: Char) = copy(value = value + char)
 	}
@@ -22,4 +26,6 @@ data class LexerState(val tokens: List<Token> = emptyList(),
 	fun withPendingToken(pendingToken: PendingToken?) = copy(pendingToken = pendingToken)
 
 	fun withNextLine() = copy(lineNumber = lineNumber + 1)
+
+	fun withIssue(issue: Issue) = copy(issues = issues + issue)
 }

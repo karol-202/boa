@@ -4,4 +4,6 @@ object Chars
 {
 	const val SPACE = '\u0020'
 	const val TAB = '\t'
+
+	val SPECIAL = listOf('+', '-', '*', '/', '%', '=', '&', '|', '!', '<', '>')
 }

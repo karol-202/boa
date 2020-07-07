@@ -17,5 +17,5 @@ class LineSeparatorTransformer(targetLineSeparator: Char) : Phase<String, String
 		.replace(CRLF, replacement)
 		.replace(LF, replacement)
 		.replace(CR, replacement)
-		.let { Phase.Result.Success(it, emptyList()) }
+		.let { Phase.Result.Success(it) }
 }

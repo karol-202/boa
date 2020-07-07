@@ -34,6 +34,11 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 					then moveToNextLine
 		)
 		+ LexerRule.onPendingToken(
+			matchToken = { isSingleLineComment },
+			matchChar = { it == Chars.EOF },
+			action = finish { token -> Token.SingleLineComment(token.value.drop(2)) }
+		)
+		+ LexerRule.onPendingToken(
 			matchToken = { isComment },
 			action = append
 		)
@@ -47,15 +52,14 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 			action = appendAndFinishInvalid
 					then issue { char -> LexerIssue.UnexpectedCharacter(char) }
 		)
-		+ LexerRule.onPendingToken(
-			matchToken = { true },
+		+ LexerRule.simple(
 			matchChar = { it == '/' },
-			action = finishWithPossibleIssue { token -> interpretPendingToken(token) }
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
 					then begin
 		)
-		+ LexerRule.onPendingToken(
-			matchChar = { it == Chars.SPACE || it == Chars.TAB },
-			action = finishWithPossibleIssue { token -> interpretPendingToken(token) }
+		+ LexerRule.simple(
+			matchChar = { it == Chars.SPACE || it == Chars.TAB || it == Chars.EOF },
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
 		)
 		+ LexerRule.simple(
 			matchChar = { it == lineSeparator },
@@ -88,18 +92,51 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
 					then add { Token.Comma }
 		)
-		+ LexerRule.simple(
-			matchChar = { it.isLetterOrDigit() || it in Chars.SPECIAL },
-			action = ifTokenPending(then = { append }, orElse = { begin })
+		+ LexerRule.onPendingToken(
+			matchToken = { isNumberLiteral },
+			matchChar = { it == '.' },
+			action = append
 		)
 		+ LexerRule.simple(
-			action = issue { char -> LexerIssue.IllegalCharacter(char) }
+			matchChar = { it == '.' },
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
+					then add { Token.Dot }
+		)
+		+ LexerRule.simple(
+			matchChar = { it == '"' },
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
+					then begin
+		)
+		+ LexerRule.onPendingToken(
+			matchToken = { isAlphanumericOnly || isNumberLiteral },
+			matchChar = { it.isLetterOrDigit() },
+			action = append
+		)
+		+ LexerRule.simple(
+			matchChar = { it.isLetterOrDigit() },
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
+					then begin
+		)
+		+ LexerRule.onPendingToken(
+			matchToken = { isSpecialOnly },
+			matchChar = { it in Chars.SPECIAL },
+			action = append
+		)
+		+ LexerRule.simple(
+			matchChar = { it in Chars.SPECIAL },
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
+					then begin
+		)
+		+ LexerRule.simple(
+			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
+					then add { char -> Token.Invalid(char.toString()) }
+					then issue { char -> LexerIssue.IllegalCharacter(char) }
 		)
 	}
 
 	override fun process(input: String): Phase.Result<List<Token>>
 	{
-		val state = input.fold(LexerState(), this::processChar)
+		val state = (input + Chars.EOF).fold(LexerState(), this::processChar)
 		return Phase.Result.Success(state.tokens, state.issues)
 	}
 
@@ -121,10 +158,10 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 				token.value.toIntOrNull()?.let { Token.IntegerLiteral(it).withNoIssue() } ?:
 				token.value.toDoubleOrNull()?.let { Token.RealLiteral(it).withNoIssue() } ?:
 				invalid().withIssue(LexerIssue.InvalidNumberLiteral(token.value))
-			token.value.all { it.isLetterOrDigit() } ->
+			token.isAlphanumericOnly ->
 				KeywordType.findBySymbol(token.value)?.let { Token.Keyword(it).withNoIssue() } ?:
 				Token.Identifier(token.value).withNoIssue()
-			token.value.all { it in Chars.SPECIAL } ->
+			token.isSpecialOnly ->
 				Token.Special(token.value).withNoIssue()
 			else ->
 				invalid().withIssue(LexerIssue.InvalidToken(token.value))

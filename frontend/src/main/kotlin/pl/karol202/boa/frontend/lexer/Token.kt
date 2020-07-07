@@ -28,6 +28,8 @@ sealed class Token
 
 	object ParenthesisClose : Token()
 
+	object Dot : Token()
+
 	object Comma : Token()
 
 	object Newline : Token()

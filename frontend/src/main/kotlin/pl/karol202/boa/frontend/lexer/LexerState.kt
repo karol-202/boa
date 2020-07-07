@@ -15,6 +15,8 @@ data class LexerState(val tokens: List<Token> = emptyList(),
 		val isMultiLineComment get() = value.startsWith("/*")
 		val isComment get() = isSingleLineComment || isMultiLineComment
 		val isCommentStartMarker get() = value.singleOrNull()?.equals('/') ?: false
+		val isAlphanumericOnly get() = value.all { it.isLetterOrDigit() }
+		val isSpecialOnly get() = value.all { it in Chars.SPECIAL }
 
 		constructor(firstChar: Char) : this(firstChar.toString())
 

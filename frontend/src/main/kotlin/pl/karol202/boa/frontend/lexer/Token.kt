@@ -16,6 +16,10 @@ sealed class Token
 
 	data class RealLiteral(val value: Double) : Token()
 
+	data class SingleLineComment(val value: String) : Token()
+
+	data class MultiLineComment(val value: String) : Token()
+
 	object BlockOpen : Token()
 
 	object BlockClose : Token()
@@ -25,4 +29,6 @@ sealed class Token
 	object ParenthesisClose : Token()
 
 	object Comma : Token()
+
+	object Newline : Token()
 }

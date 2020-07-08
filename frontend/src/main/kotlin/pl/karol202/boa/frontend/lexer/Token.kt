@@ -10,23 +10,35 @@ sealed class Token
 
 	data class Special(val value: String) : Token()
 
-	data class StringLiteral(val value: String) : Token()
+	sealed class Literal : Token()
+	{
+		data class String(val value: kotlin.String) : Literal()
 
-	data class IntegerLiteral(val value: Int) : Token()
+		data class Integer(val value: Int) : Literal()
 
-	data class RealLiteral(val value: Double) : Token()
+		data class Real(val value: Double) : Literal()
+	}
 
-	data class SingleLineComment(val value: String) : Token()
+	sealed class Comment : Token()
+	{
+		data class SingleLine(val value: String) : Comment()
 
-	data class MultiLineComment(val value: String) : Token()
+		data class MultiLine(val value: String) : Comment()
+	}
 
-	object BlockOpen : Token()
+	sealed class Block : Token()
+	{
+		object Open : Block()
 
-	object BlockClose : Token()
+		object Close : Block()
+	}
 
-	object ParenthesisOpen : Token()
+	sealed class Parenthesis : Token()
+	{
+		object Open : Parenthesis()
 
-	object ParenthesisClose : Token()
+		object Close : Parenthesis()
+	}
 
 	object Dot : Token()
 

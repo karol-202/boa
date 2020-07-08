@@ -1,8 +1,9 @@
-package pl.karol202.boa.frontend.util
+package pl.karol202.boa.frontend.transformer
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import pl.karol202.boa.Phase
+import pl.karol202.boa.frontend.transformer.LineSeparatorTransformer
 
 class LineSeparatorTransformerTest : StringSpec()
 {

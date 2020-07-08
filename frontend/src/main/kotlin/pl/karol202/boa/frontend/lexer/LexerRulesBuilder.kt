@@ -1,14 +1,11 @@
 package pl.karol202.boa.frontend.lexer
 
-import pl.karol202.boa.frontend.LexerActionScope
-
 interface LexerRulesBuilder : LexerActionScope
 {
 	operator fun LexerRule.unaryPlus()
 }
 
-class LexerRulesBuilderImpl : LexerRulesBuilder,
-                              LexerActionScope
+class LexerRulesBuilderImpl : LexerRulesBuilder, LexerActionScope
 {
 	val rules = mutableListOf<LexerRule>()
 

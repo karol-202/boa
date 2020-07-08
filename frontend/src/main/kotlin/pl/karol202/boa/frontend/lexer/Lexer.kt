@@ -15,7 +15,13 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 		+ LexerRule.onPendingToken(
 			matchToken = { isStringLiteral },
 			matchChar = { it == '\"' },
-			action = finish { token -> Token.StringLiteral(token.value.drop(1)) }
+			action = finish { token ->
+				Token.Literal.String(
+					token.value.drop(
+						1
+					)
+				)
+			}
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isStringLiteral },
@@ -24,19 +30,33 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 		+ LexerRule.onPendingToken(
 			matchToken = { isMultiLineComment && value.endsWith('*') },
 			matchChar = { it == '/' },
-			action = finish { token -> Token.MultiLineComment(token.value.drop(2).dropLast(1)) }
+			action = finish { token ->
+				Token.Comment.MultiLine(
+					token.value.drop(
+						2
+					).dropLast(1)
+				)
+			}
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isSingleLineComment },
 			matchChar = { it == lineSeparator },
-			action = finish { token -> Token.SingleLineComment(token.value.drop(2)) }
+			action = finish { token ->
+				Token.Comment.SingleLine(
+					token.value.drop(2)
+				)
+			}
 					then add { Token.Newline }
 					then moveToNextLine
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isSingleLineComment },
 			matchChar = { it == Chars.EOF },
-			action = finish { token -> Token.SingleLineComment(token.value.drop(2)) }
+			action = finish { token ->
+				Token.Comment.SingleLine(
+					token.value.drop(2)
+				)
+			}
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isComment },
@@ -70,22 +90,22 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 		+ LexerRule.simple(
 			matchChar = { it == '{' },
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
-					then add { Token.BlockOpen }
+					then add { Token.Block.Open }
 		)
 		+ LexerRule.simple(
 			matchChar = { it == '}' },
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
-					then add { Token.BlockClose }
+					then add { Token.Block.Close }
 		)
 		+ LexerRule.simple(
 			matchChar = { it == '(' },
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
-					then add { Token.ParenthesisOpen }
+					then add { Token.Parenthesis.Open }
 		)
 		+ LexerRule.simple(
 			matchChar = { it == ')' },
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
-					then add { Token.ParenthesisClose }
+					then add { Token.Parenthesis.Close }
 		)
 		+ LexerRule.simple(
 			matchChar = { it == ',' },
@@ -152,11 +172,11 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 		return when
 		{
 			token.isStringLiteral ->
-				if(token.value.endsWith('\"')) Token.StringLiteral(token.value).withNoIssue()
+				if(token.value.endsWith('\"')) Token.Literal.String(token.value).withNoIssue()
 				else invalid().withIssue(LexerIssue.InvalidStringLiteral(token.value))
 			token.isNumberLiteral ->
-				token.value.toIntOrNull()?.let { Token.IntegerLiteral(it).withNoIssue() } ?:
-				token.value.toDoubleOrNull()?.let { Token.RealLiteral(it).withNoIssue() } ?:
+				token.value.toIntOrNull()?.let { Token.Literal.Integer(it).withNoIssue() } ?:
+				token.value.toDoubleOrNull()?.let { Token.Literal.Real(it).withNoIssue() } ?:
 				invalid().withIssue(LexerIssue.InvalidNumberLiteral(token.value))
 			token.isAlphanumericOnly ->
 				KeywordType.findBySymbol(token.value)?.let { Token.Keyword(it).withNoIssue() } ?:

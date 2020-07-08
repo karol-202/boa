@@ -1,8 +1,4 @@
-package pl.karol202.boa.frontend
-
-import pl.karol202.boa.frontend.lexer.LexerIssue
-import pl.karol202.boa.frontend.lexer.LexerState
-import pl.karol202.boa.frontend.lexer.Token
+package pl.karol202.boa.frontend.lexer
 
 private typealias SimpleLexerAction = LexerState.(Char) -> LexerState
 private typealias PendingTokenLexerAction = LexerState.(Char, LexerState.PendingToken) -> LexerState

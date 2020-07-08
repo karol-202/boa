@@ -2,7 +2,7 @@ package pl.karol202.boa
 
 interface Phase<I, O>
 {
-	sealed class Result<O>
+	sealed class Result<out O>
 	{
 		data class Success<O>(val result: O,
 		                      val issues: List<Issue> = emptyList()) : Result<O>()

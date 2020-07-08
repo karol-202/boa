@@ -28,19 +28,19 @@ class LexerTest : StringSpec()
 		"String literal" {
 			val input = "\"this is a literal\""
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.StringLiteral("this is a literal")
+				Token.Literal.String("this is a literal")
 			))
 		}
 		"Integer literal" {
 			val input = "666"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.IntegerLiteral(666)
+				Token.Literal.Integer(666)
 			))
 		}
 		"Real literal" {
 			val input = "1.577"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.RealLiteral(1.577)
+				Token.Literal.Real(1.577)
 			))
 		}
 		"Variable declaration" {
@@ -54,87 +54,81 @@ class LexerTest : StringSpec()
 			val input = "test = 6"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("test"),
-				Token.Special("="),
-				Token.IntegerLiteral(6)
+				Token.Special("="), Token.Literal.Integer(6)
 			))
 		}
 		"Variable assignment without spaces" {
 			val input = "test=6"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("test"),
-				Token.Special("="),
-				Token.IntegerLiteral(6)
+				Token.Special("="), Token.Literal.Integer(6)
 			))
 		}
 		"Identifier and single-line comment" {
 			val input = "test //comment"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("test"),
-				Token.SingleLineComment("comment")
+				Token.Comment.SingleLine("comment")
 			))
 		}
 		"Assignment with multi-line comment in single-line" {
 			val input = "test /* comment */ += \"AAA\""
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("test"),
-				Token.MultiLineComment(" comment "),
-				Token.Special("+="),
-				Token.StringLiteral("AAA")
+				Token.Comment.MultiLine(" comment "),
+				Token.Special("+="), Token.Literal.String("AAA")
 			))
 		}
 		"Function invocation without parameters" {
 			val input = "function()"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("function"),
-				Token.ParenthesisOpen,
-				Token.ParenthesisClose
+				Token.Parenthesis.Open,
+				Token.Parenthesis.Close
 			))
 		}
 		"Function invocation with 2 parameters" {
 			val input = "function(test, \"BBB\")"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("function"),
-				Token.ParenthesisOpen,
+				Token.Parenthesis.Open,
 				Token.Identifier("test"),
-				Token.Comma,
-				Token.StringLiteral("BBB"),
-				Token.ParenthesisClose
+				Token.Comma, Token.Literal.String("BBB"),
+				Token.Parenthesis.Close
 			))
 		}
 		"Multi-line comment" {
 			val input = "/*te\nst*/"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.MultiLineComment("te\nst")
+				Token.Comment.MultiLine("te\nst")
 			))
 		}
 		"Multi-line string literal" {
 			val input = "\"te\nst\""
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.StringLiteral("te\nst")
+				Token.Literal.String("te\nst")
 			))
 		}
 		"String inside comment" {
 			val input = "/*\"te\"st*/"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.MultiLineComment("\"te\"st")
+				Token.Comment.MultiLine("\"te\"st")
 			))
 		}
 		"Comment inside string" {
 			val input = "\"this is /*literal*/\""
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
-				Token.StringLiteral("this is /*literal*/")
+				Token.Literal.String("this is /*literal*/")
 			))
 		}
 		"Function invocation in multiple lines" {
 			val input = "print(3.2,\n\t\"test\")"
 			lexer.process(input) shouldBe Phase.Result.Success(listOf(
 				Token.Identifier("print"),
-				Token.ParenthesisOpen,
-				Token.RealLiteral(3.2),
+				Token.Parenthesis.Open, Token.Literal.Real(3.2),
 				Token.Comma,
-				Token.Newline,
-				Token.StringLiteral("test"),
-				Token.ParenthesisClose
+				Token.Newline, Token.Literal.String("test"),
+				Token.Parenthesis.Close
 			))
 		}
 	}

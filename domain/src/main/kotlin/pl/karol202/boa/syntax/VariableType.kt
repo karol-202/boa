@@ -3,5 +3,15 @@ package pl.karol202.boa.syntax
 enum class VariableType
 {
 	IMMUTABLE,
-	MUTABLE
+	MUTABLE;
+
+	companion object
+	{
+		fun findByKeyword(keywordType: KeywordType) = when(keywordType)
+		{
+			KeywordType.LET -> IMMUTABLE
+			KeywordType.VAR -> MUTABLE
+			else -> throw IllegalStateException("Invalid variable keyword: $keywordType")
+		}
+	}
 }

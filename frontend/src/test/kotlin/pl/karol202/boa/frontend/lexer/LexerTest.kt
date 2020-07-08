@@ -1,10 +1,8 @@
-package pl.karol202.boa.frontend.frontend
+package pl.karol202.boa.frontend.lexer
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import pl.karol202.boa.Phase
-import pl.karol202.boa.frontend.lexer.Lexer
-import pl.karol202.boa.frontend.lexer.Token
 import pl.karol202.boa.syntax.KeywordType
 
 class LexerTest : StringSpec()

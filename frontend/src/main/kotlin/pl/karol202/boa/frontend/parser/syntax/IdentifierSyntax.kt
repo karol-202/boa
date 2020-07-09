@@ -5,7 +5,7 @@ import pl.karol202.boa.frontend.lexer.Token
 
 object IdentifierSyntax : AbstractSyntax<IdentifierNode>()
 {
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		token<Token.Identifier>() then { identifier ->
 			IdentifierNode(identifier.name).finish()
 		}

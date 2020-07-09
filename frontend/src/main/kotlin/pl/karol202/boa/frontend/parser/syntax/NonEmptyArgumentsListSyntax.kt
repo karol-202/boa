@@ -5,7 +5,7 @@ import pl.karol202.boa.frontend.lexer.Token
 
 object NonEmptyArgumentsListSyntax : AbstractSyntax<ArgumentsListNode>()
 {
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		syntax(ExpressionSyntax).then { firstParameter ->
 			either<ArgumentsListNode> {
 				+ token<Token.Comma>().then {

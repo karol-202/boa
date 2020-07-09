@@ -4,7 +4,7 @@ import pl.karol202.boa.ast.ArgumentsListNode
 
 object ArgumentsListSyntax : AbstractSyntax<ArgumentsListNode>()
 {
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		either<ArgumentsListNode> {
 			+ syntax(NonEmptyArgumentsListSyntax).just()
 			+ ArgumentsListNode().finish()

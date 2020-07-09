@@ -16,7 +16,7 @@ class OperatorExpressionRestSyntax private constructor(private val leftOperand: 
 		fun binary(leftOperand: ExpressionNode) = OperatorExpressionRestSyntax(leftOperand, OperatorType.Position.BINARY)
 	}
 
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		syntax(OperatorSyntax(operatorPosition)) then { operator ->
 			syntax(ExpressionOperandSyntax) then { rightOperand ->
 				val expression = InvocationNode(operator, ArgumentsListNode(leftOperand, rightOperand))

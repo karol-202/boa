@@ -7,7 +7,7 @@ import pl.karol202.boa.syntax.VariableType
 
 object VariableSyntax : AbstractSyntax<VariableNode>()
 {
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		token<Token.Keyword>() matching { it.type in KeywordType.variable } then { keyword ->
 			syntax(IdentifierSyntax) then { identifier ->
 				token<Token.Special>() matching { it.value == "=" } then {

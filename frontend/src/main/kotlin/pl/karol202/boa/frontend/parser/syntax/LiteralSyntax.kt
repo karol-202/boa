@@ -5,7 +5,7 @@ import pl.karol202.boa.frontend.lexer.Token
 
 object LiteralSyntax : AbstractSyntax<LiteralNode>()
 {
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		token<Token.Literal>() then { literal ->
 			when(literal)
 			{

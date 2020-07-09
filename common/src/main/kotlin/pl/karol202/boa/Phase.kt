@@ -2,12 +2,9 @@ package pl.karol202.boa
 
 interface Phase<I, O>
 {
-	sealed class Result<out O>
+	interface Result<O> : IssueProvider
 	{
-		data class Success<O>(val result: O,
-		                      val issues: List<Issue> = emptyList()) : Result<O>()
-
-		data class Failure(val issues: List<Issue>): Result<Nothing>()
+		val result: O?
 	}
 
 	fun process(input: I): Result<O>

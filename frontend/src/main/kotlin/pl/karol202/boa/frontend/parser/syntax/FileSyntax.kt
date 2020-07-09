@@ -6,7 +6,7 @@ import pl.karol202.boa.frontend.lexer.Token
 
 object FileSyntax : AbstractSyntax<FileNode>()
 {
-	override fun SyntaxScope.parse() =
+	override fun SyntaxScope.syntax() =
 		syntax(StatementSyntax).then { statement ->
 			FileNode(listOf(statement)).finish()
 		}

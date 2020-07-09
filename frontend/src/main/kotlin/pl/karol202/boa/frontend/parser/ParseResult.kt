@@ -7,22 +7,28 @@ sealed class ParseResult<out N : Node>
 {
 	data class Success<out N : Node>(override val node: N,
 	                                 override val remainingTokens: List<Token>,
-	                                 override val issues: List<ParserIssue> = emptyList()) : ParseResult<N>()
+	                                 override val traceElement: TraceElement) : ParseResult<N>()
 	{
-		override fun <R : Node> flatMap(transform: Success<N>.() -> ParseResult<R>) = transform()
+		override fun <R> fold(ifSuccess: Success<N>.() -> R, ifFailure: Failure.() -> R) = ifSuccess()
+
+		override fun withTraceElement(traceElement: TraceElement) = copy(traceElement = traceElement)
 	}
 
 	data class Failure(override val remainingTokens: List<Token>,
-	                   override val issues: List<ParserIssue> = emptyList()) : ParseResult<Nothing>()
+	                   override val traceElement: TraceElement) : ParseResult<Nothing>()
 	{
 		override val node = null
 
-		override fun <R : Node> flatMap(transform: Success<Nothing>.() -> ParseResult<R>) = this
+		override fun <R> fold(ifSuccess: Success<Nothing>.() -> R, ifFailure: Failure.() -> R) = ifFailure()
+
+		override fun withTraceElement(traceElement: TraceElement) = copy(traceElement = traceElement)
 	}
 
 	abstract val node: N?
 	abstract val remainingTokens: List<Token>
-	abstract val issues: List<ParserIssue>
+	abstract val traceElement: TraceElement
 
-	abstract fun <R : Node> flatMap(transform: Success<N>.() -> ParseResult<R>): ParseResult<R>
+	abstract fun <R> fold(ifSuccess: Success<N>.() -> R, ifFailure: Failure.() -> R): R
+
+	abstract fun withTraceElement(traceElement: TraceElement): ParseResult<N>
 }

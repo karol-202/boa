@@ -1,6 +1,6 @@
 package pl.karol202.boa.ast
 
-data class ArgumentsListNode(val parameters: List<ExpressionNode>) : Node
+data class ArgumentsListNode(val arguments: List<ExpressionNode>) : Node
 {
-	constructor(vararg parameters: ExpressionNode?) : this(listOfNotNull(*parameters))
+	constructor(vararg arguments: ExpressionNode?) : this(listOfNotNull(*arguments))
 }

@@ -7,7 +7,7 @@ import pl.karol202.boa.frontend.lexer.Token
 object FileSyntax : AbstractSyntax<FileNode>()
 {
 	override fun SyntaxScope.syntax() =
-		syntax(StatementSyntax).then { statement ->
-			FileNode(listOf(statement)).finish()
+		syntax(StatementSequenceSyntax).then { statements ->
+			FileNode(statements).finish()
 		}
 }

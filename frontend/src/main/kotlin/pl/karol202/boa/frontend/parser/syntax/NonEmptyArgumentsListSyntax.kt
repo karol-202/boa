@@ -10,7 +10,7 @@ object NonEmptyArgumentsListSyntax : AbstractSyntax<ArgumentsListNode>()
 			either<ArgumentsListNode> {
 				+ token<Token.Comma>().then {
 					syntax(NonEmptyArgumentsListSyntax).then { rest ->
-						ArgumentsListNode(firstParameter, *rest.parameters.toTypedArray()).finish()
+						ArgumentsListNode(firstParameter, *rest.arguments.toTypedArray()).finish()
 					}
 				}
 				+ ArgumentsListNode(firstParameter).finish()

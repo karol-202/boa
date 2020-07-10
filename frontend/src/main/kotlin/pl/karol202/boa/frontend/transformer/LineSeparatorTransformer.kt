@@ -12,8 +12,8 @@ class LineSeparatorTransformer(targetLineSeparator: Char) : Phase<String, String
 		private const val CR = "\r"
 	}
 
-	data class Result(override val result: String) : Phase.Result<String>,
-	                                                      IssueProvider by IssueProvider.noIssues
+	data class Result(override val value: String) : Phase.Result.Success<String>,
+	                                                IssueProvider by IssueProvider.noIssues
 
 	private val replacement = targetLineSeparator.toString()
 

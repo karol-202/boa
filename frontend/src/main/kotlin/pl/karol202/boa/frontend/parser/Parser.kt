@@ -5,20 +5,18 @@ import pl.karol202.boa.Phase
 import pl.karol202.boa.ast.FileNode
 import pl.karol202.boa.frontend.lexer.Token
 import pl.karol202.boa.frontend.parser.syntax.FileSyntax
-import sun.awt.X11.XConstants.Success
 
-class Parser : Phase<List<Token>, FileNode>
+object Parser : Phase<List<Token>, FileNode>
 {
-	sealed class Result : Phase.Result<FileNode>,
-	                      IssueProvider by IssueProvider.noIssues
+	sealed class Result<out O> : Phase.Result<O>,
+	                             IssueProvider by IssueProvider.noIssues
 	{
-		data class Success(override val result: FileNode,
-		                   override val traceTree: TraceElement) : Result()
+		data class Success(override val value: FileNode,
+		                   override val traceTree: TraceElement) : Result<FileNode>(),
+                                                                   Phase.Result.Success<FileNode>
 
-		data class Failure(override val traceTree: TraceElement) : Result()
-		{
-			override val result: FileNode? = null
-		}
+		data class Failure(override val traceTree: TraceElement) : Result<Nothing>(),
+		                                                           Phase.Result.Failure
 
 		abstract val traceTree: TraceElement
 	}

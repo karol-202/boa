@@ -6,8 +6,8 @@ import pl.karol202.boa.syntax.KeywordType
 
 class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 {
-	data class Result(override val result: List<Token>,
-	                  override val issues: List<Issue> = emptyList()) : Phase.Result<List<Token>>
+	data class Result(override val value: List<Token>,
+	                  override val issues: List<Issue> = emptyList()) : Phase.Result.Success<List<Token>>
 
 	private val rules = buildRules {
 		+ LexerRule.onPendingToken(

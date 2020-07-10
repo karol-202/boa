@@ -10,7 +10,7 @@ object StatementSequenceSyntax : AbstractSyntax<StatementSequenceNode>()
 			+ syntax(StatementSyntax).then { firstStatement ->
 				syntax(IgnoreTokensUntilSyntax { it is Token.Newline }).then {
 					syntax(StatementSequenceSyntax).then { rest ->
-						StatementSequenceNode(firstStatement, *rest.statements.toTypedArray()).finish()
+						StatementSequenceNode(firstStatement, *rest.list.toTypedArray()).finish()
 					}
 				}
 			}

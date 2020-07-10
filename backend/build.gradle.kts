@@ -6,16 +6,11 @@ plugins {
 
 tasks {
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    withType<Test> {
-        useJUnitPlatform()
+        kotlinOptions.freeCompilerArgs = listOf("-Xopt-in=kotlin.ExperimentalStdlibApi")
     }
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     api(project(":common"))
-
-    testImplementation("io.kotest:kotest-runner-junit5:4.1.1")
 }

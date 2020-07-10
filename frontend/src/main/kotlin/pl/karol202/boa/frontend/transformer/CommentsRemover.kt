@@ -6,8 +6,8 @@ import pl.karol202.boa.frontend.lexer.Token
 
 object CommentsRemover : Phase<List<Token>, List<Token>>
 {
-	data class Result(override val result: List<Token>) : Phase.Result<List<Token>>,
-	                                                      IssueProvider by IssueProvider.noIssues
+	data class Result(override val value: List<Token>) : Phase.Result.Success<List<Token>>,
+	                                                     IssueProvider by IssueProvider.noIssues
 
 	override fun process(input: List<Token>) = Result(input.filterNot { it is Token.Comment })
 }

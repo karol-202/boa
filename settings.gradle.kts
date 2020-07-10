@@ -1,5 +1,7 @@
 rootProject.name = "boa"
 
 include(":domain")
-include(":frontend")
 include(":common")
+include(":frontend")
+include(":backend")
+include(":cli")

@@ -19,6 +19,7 @@ private val pipeline =
 fun main()
 {
 	println("Boa CLI")
+	println("Press Ctrl+D to stop reading and execute")
 	println("------------------------------")
 	val input = System.`in`.readBytes().decodeToString()
 

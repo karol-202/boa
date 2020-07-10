@@ -27,11 +27,11 @@ More features will be added.
 
 ## Implementation stages:
 - Frontend
-  - [x] Lexer
-  - [x] Parser
+  - [X] Lexer
+  - [X] Parser
   - [ ] Semantic analysis
 - Backend
-  - [ ] Interpreter
+  - [X] Interpreter
   
 ## How to test?
-You can test frontend CLI by running `:frontend:run` gradle task.
+You can test Boa using CLI by running `:cli:run` gradle task.

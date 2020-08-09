@@ -2,9 +2,10 @@ package pl.karol202.boa.frontend.lexer
 
 import pl.karol202.boa.Issue
 import pl.karol202.boa.Phase
+import pl.karol202.boa.syntax.Chars
 import pl.karol202.boa.syntax.KeywordType
 
-class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
+object Lexer : Phase<String, List<Token>>
 {
 	data class Result(override val value: List<Token>,
 	                  override val issues: List<Issue> = emptyList()) : Phase.Result.Success<List<Token>>
@@ -12,20 +13,14 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 	private val rules = buildRules {
 		+ LexerRule.onPendingToken(
 			matchToken = { isStringLiteral || isMultiLineComment },
-			matchChar = { it == lineSeparator },
+			matchChar = { it == Chars.LINE_SEPARATOR },
 			action = append
 					then moveToNextLine
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isStringLiteral },
 			matchChar = { it == '\"' },
-			action = finish { token ->
-				Token.Literal.String(
-					token.value.drop(
-						1
-					)
-				)
-			}
+			action = finish { token -> Token.Literal.String(token.value.drop(1)) }
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isStringLiteral },
@@ -34,33 +29,19 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 		+ LexerRule.onPendingToken(
 			matchToken = { isMultiLineComment && value.endsWith('*') },
 			matchChar = { it == '/' },
-			action = finish { token ->
-				Token.Comment.MultiLine(
-					token.value.drop(
-						2
-					).dropLast(1)
-				)
-			}
+			action = finish { token -> Token.Comment.MultiLine(token.value.drop(2).dropLast(1)) }
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isSingleLineComment },
-			matchChar = { it == lineSeparator },
-			action = finish { token ->
-				Token.Comment.SingleLine(
-					token.value.drop(2)
-				)
-			}
+			matchChar = { it == Chars.LINE_SEPARATOR },
+			action = finish { token -> Token.Comment.SingleLine(token.value.drop(2)) }
 					then add { Token.Newline }
 					then moveToNextLine
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isSingleLineComment },
 			matchChar = { it == Chars.EOF },
-			action = finish { token ->
-				Token.Comment.SingleLine(
-					token.value.drop(2)
-				)
-			}
+			action = finish { token -> Token.Comment.SingleLine(token.value.drop(2)) }
 		)
 		+ LexerRule.onPendingToken(
 			matchToken = { isComment },
@@ -86,7 +67,7 @@ class Lexer(private val lineSeparator: Char) : Phase<String, List<Token>>
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
 		)
 		+ LexerRule.simple(
-			matchChar = { it == lineSeparator },
+			matchChar = { it == Chars.LINE_SEPARATOR },
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }
 					then add { Token.Newline }
 					then moveToNextLine

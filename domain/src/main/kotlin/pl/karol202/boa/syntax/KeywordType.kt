@@ -2,9 +2,9 @@ package pl.karol202.boa.syntax
 
 enum class KeywordType(val symbol: String)
 {
+	IMPORT("import"),
 	LET("let"),
-	VAR("var"),
-	RETURN("return");
+	VAR("var");
 
 	companion object
 	{

@@ -6,12 +6,11 @@ import pl.karol202.boa.frontend.lexer.Token
 object LiteralSyntax : AbstractSyntax<LiteralNode>()
 {
 	override fun SyntaxScope.syntax() =
-		token<Token.Literal>() then { literal ->
-			when(literal)
-			{
-				is Token.Literal.String -> LiteralNode.StringLiteral(literal.value)
-				is Token.Literal.Integer -> LiteralNode.IntegerLiteral(literal.value)
-				is Token.Literal.Real -> LiteralNode.RealLiteral(literal.value)
-			}.finish()
+		either<LiteralNode> {
+			+ syntax(StringLiteralSyntax).just()
+			+ syntax(IntegerLiteralSyntax).just()
+			+ syntax(RealLiteralSyntax).just()
 		}
 }
+
+

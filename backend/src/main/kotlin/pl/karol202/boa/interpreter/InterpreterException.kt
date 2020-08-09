@@ -13,4 +13,7 @@ sealed class InterpreterException(message: String) : RuntimeException(message)
 
 	class UnknownIdentifier(identifier: String) :
 		InterpreterException(identifier)
+
+	class ImportNotSupported :
+		InterpreterException("Imports are not supported by backend")
 }

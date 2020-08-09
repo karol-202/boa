@@ -1,6 +1,7 @@
 package pl.karol202.boa.frontend.lexer
 
 import pl.karol202.boa.Issue
+import pl.karol202.boa.syntax.Chars
 
 data class LexerState(val tokens: List<Token> = emptyList(),
                       val pendingToken: PendingToken? = null,

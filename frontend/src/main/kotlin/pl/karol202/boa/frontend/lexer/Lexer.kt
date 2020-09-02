@@ -1,15 +1,11 @@
 package pl.karol202.boa.frontend.lexer
 
-import pl.karol202.boa.Issue
 import pl.karol202.boa.Phase
 import pl.karol202.boa.syntax.Chars
 import pl.karol202.boa.syntax.KeywordType
 
 object Lexer : Phase<String, List<Token>>
 {
-	data class Result(override val value: List<Token>,
-	                  override val issues: List<Issue> = emptyList()) : Phase.Result.Success<List<Token>>
-
 	private val rules = buildRules {
 		+ LexerRule.onPendingToken(
 			matchToken = { isStringLiteral || isMultiLineComment },
@@ -139,10 +135,10 @@ object Lexer : Phase<String, List<Token>>
 		)
 	}
 
-	override fun process(input: String): Result
+	override fun process(input: String): Phase.Result.Success<List<Token>>
 	{
 		val state = (input + Chars.EOF).fold(LexerState(), this::processChar)
-		return Result(state.tokens, state.issues)
+		return Phase.Result.Success(state.tokens, state.issues)
 	}
 
 	private fun processChar(state: LexerState, char: Char) =

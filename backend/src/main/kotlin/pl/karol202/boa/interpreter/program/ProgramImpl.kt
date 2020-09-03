@@ -1,6 +1,6 @@
-package pl.karol202.boa.interpreter
+package pl.karol202.boa.interpreter.program
 
-import pl.karol202.boa.ast.FileNode
+import pl.karol202.boa.ast.FileWithImportsNode
 import pl.karol202.boa.interpreter.context.InterpreterContext
 import pl.karol202.boa.interpreter.context.Invocable
 import pl.karol202.boa.interpreter.handler.FileHandler
@@ -16,11 +16,13 @@ private val DEFAULT_VARIABLES = mapOf(
 	}
 )
 
-class InterpreterProgram(private val fileNode: FileNode) : Program
+class ProgramImpl(private val fileNodes: List<FileWithImportsNode>) : Program
 {
 	override fun execute(input: InputStream, output: OutputStream)
 	{
-		val context = InterpreterContext(input, output, DEFAULT_VARIABLES)
-		context.handle(FileHandler, fileNode)
+		val initialContext = InterpreterContext(input, output, DEFAULT_VARIABLES)
+		fileNodes.fold(initialContext) { context, node ->
+			context.handle(FileHandler, node.file).context
+		}
 	}
 }

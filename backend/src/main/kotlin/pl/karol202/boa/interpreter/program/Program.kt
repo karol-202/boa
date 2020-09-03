@@ -1,4 +1,4 @@
-package pl.karol202.boa.interpreter
+package pl.karol202.boa.interpreter.program
 
 import java.io.InputStream
 import java.io.OutputStream

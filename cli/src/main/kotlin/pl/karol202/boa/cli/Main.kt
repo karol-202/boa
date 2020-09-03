@@ -1,31 +1,32 @@
 package pl.karol202.boa.cli
 
-import pl.karol202.boa.frontend.lexer.Lexer
-import pl.karol202.boa.frontend.parser.Parser
-import pl.karol202.boa.frontend.transformer.CommentsRemover
-import pl.karol202.boa.frontend.transformer.LineSeparatorTransformer
+import com.github.ajalt.clikt.completion.CompletionCandidates
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.arguments.default
+import com.github.ajalt.clikt.parameters.arguments.optional
+import com.github.ajalt.clikt.parameters.types.file
 import pl.karol202.boa.interpreter.Interpreter
 import pl.karol202.boa.plus
+import java.io.File
 
-private const val INTERMEDIATE_LINE_SEPARATOR = '\n'
-
-private val pipeline =
-	LineSeparatorTransformer(INTERMEDIATE_LINE_SEPARATOR) +
-			Lexer(INTERMEDIATE_LINE_SEPARATOR) +
-			CommentsRemover +
-			Parser +
-			Interpreter
-
-fun main()
+object CLI : CliktCommand()
 {
-	println("Boa CLI")
-	println("Press Ctrl+D to stop reading and execute")
-	println("------------------------------")
-	val input = System.`in`.readBytes().decodeToString()
+	private val sourceFile: File by argument("FILE", help = "Boa source file",
+	                                         completionCandidates = CompletionCandidates.Path).file(mustExist = true,
+	                                                                                                canBeDir = false,
+	                                                                                                mustBeReadable = true)
 
-	when(val result = pipeline.process(input))
+	private val pipeline = SourcesResolver + Interpreter
+
+	override fun run()
 	{
-		is Interpreter.Result -> result.value.execute(System.`in`, System.out)
-		else -> println(result)
+		val result = pipeline.process(sourceFile)
+		result.fold(
+			ifSuccess = { it.execute(System.`in`, System.out) },
+			ifFailure = { println(result) }
+		)
 	}
 }
+
+fun main(args: Array<String>) = CLI.main(args)

@@ -1,7 +1,3 @@
 plugins {
-    kotlin("jvm") version "1.3.72"
-}
-
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    kotlin("jvm") version "1.4.0"
 }

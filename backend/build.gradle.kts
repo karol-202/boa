@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.0"
 }
 
 tasks {
@@ -11,6 +11,5 @@ tasks {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     api(project(":domain"))
 }

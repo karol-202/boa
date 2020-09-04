@@ -12,5 +12,5 @@ tasks {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    api(project(":common"))
+    api(project(":domain"))
 }

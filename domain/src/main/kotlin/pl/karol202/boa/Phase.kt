@@ -2,7 +2,7 @@ package pl.karol202.boa
 
 interface Phase<I, O>
 {
-	sealed class Result<out O> : IssueProvider
+	sealed class Result<out O>
 	{
 		data class Success<out O>(override val value: O,
 		                          override val issues: List<Issue> = emptyList()) : Result<O>()
@@ -28,6 +28,7 @@ interface Phase<I, O>
 		}
 
 		abstract val value: O?
+		abstract val issues: List<Issue>
 
 		abstract fun <NO> map(transform: (O) -> NO): Result<NO>
 

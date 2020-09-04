@@ -3,8 +3,6 @@ package pl.karol202.boa.cli
 import com.github.ajalt.clikt.completion.CompletionCandidates
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import com.github.ajalt.clikt.parameters.arguments.default
-import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.types.file
 import pl.karol202.boa.interpreter.Interpreter
 import pl.karol202.boa.plus

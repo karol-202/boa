@@ -15,7 +15,7 @@ tasks {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    api(project(":common"))
+    api(project(":domain"))
 
     testImplementation("io.kotest:kotest-runner-junit5:4.1.1")
 }

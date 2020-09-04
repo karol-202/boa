@@ -1,7 +1,7 @@
 package pl.karol202.boa.interpreter.handler
 
 import pl.karol202.boa.ast.StatementSequenceNode
-import pl.karol202.boa.interpreter.context.InterpreterContext
+import pl.karol202.boa.interpreter.data.InterpreterContext
 
 object StatementSequenceHandler : Handler<StatementSequenceNode, Unit>
 {

@@ -1,7 +1,7 @@
 package pl.karol202.boa.interpreter.handler
 
 import pl.karol202.boa.ast.LiteralNode
-import pl.karol202.boa.interpreter.context.InterpreterContext
+import pl.karol202.boa.interpreter.data.InterpreterContext
 
 object LiteralHandler : Handler<LiteralNode, Any>
 {

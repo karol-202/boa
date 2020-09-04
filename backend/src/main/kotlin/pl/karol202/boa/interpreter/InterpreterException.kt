@@ -16,4 +16,7 @@ sealed class InterpreterException(message: String) : RuntimeException(message)
 
 	class ImportNotSupported :
 		InterpreterException("Imports are not supported by backend")
+
+	class IllegalAssignment(identifier: String) :
+		InterpreterException(identifier)
 }

@@ -5,7 +5,7 @@ import pl.karol202.boa.ast.IdentifierNode
 import pl.karol202.boa.ast.InvocationNode
 import pl.karol202.boa.ast.LiteralNode
 import pl.karol202.boa.interpreter.InterpreterException
-import pl.karol202.boa.interpreter.context.InterpreterContext
+import pl.karol202.boa.interpreter.data.InterpreterContext
 
 object ExpressionHandler : Handler<ExpressionNode, Any>
 {

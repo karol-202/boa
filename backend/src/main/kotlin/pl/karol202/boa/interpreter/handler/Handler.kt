@@ -1,7 +1,7 @@
 package pl.karol202.boa.interpreter.handler
 
 import pl.karol202.boa.ast.Node
-import pl.karol202.boa.interpreter.context.InterpreterContext
+import pl.karol202.boa.interpreter.data.InterpreterContext
 
 interface Handler<in N : Node, out R>
 {

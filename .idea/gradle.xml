@@ -11,12 +11,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/backend" />
             <option value="$PROJECT_DIR$/cli" />
-            <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/frontend" />
           </set>
         </option>
-        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

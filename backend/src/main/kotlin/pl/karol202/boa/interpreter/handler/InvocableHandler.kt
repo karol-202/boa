@@ -4,8 +4,8 @@ import pl.karol202.boa.ast.ExpressionNode
 import pl.karol202.boa.ast.InvocableNode
 import pl.karol202.boa.ast.OperatorNode
 import pl.karol202.boa.interpreter.InterpreterException
-import pl.karol202.boa.interpreter.context.InterpreterContext
-import pl.karol202.boa.interpreter.context.Invocable
+import pl.karol202.boa.interpreter.data.InterpreterContext
+import pl.karol202.boa.interpreter.data.Invocable
 
 object InvocableHandler : Handler<InvocableNode, Invocable>
 {

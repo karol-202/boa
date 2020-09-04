@@ -1,19 +1,22 @@
 package pl.karol202.boa.interpreter.program
 
 import pl.karol202.boa.ast.FileWithImportsNode
-import pl.karol202.boa.interpreter.context.InterpreterContext
-import pl.karol202.boa.interpreter.context.Invocable
+import pl.karol202.boa.interpreter.data.InterpreterContext
+import pl.karol202.boa.interpreter.data.Invocable
+import pl.karol202.boa.interpreter.data.BuiltinInvocable
+import pl.karol202.boa.interpreter.data.Variable
 import pl.karol202.boa.interpreter.handler.FileHandler
+import pl.karol202.boa.syntax.VariableType
 import java.io.InputStream
 import java.io.OutputStream
 
 private val DEFAULT_VARIABLES = mapOf(
-	"print" to Invocable.create { args ->
+	"print" to Variable(VariableType.IMMUTABLE, BuiltinInvocable { args ->
 		output.writer().run {
 			appendln(args[0].toString())
 			flush()
 		}
-	}
+	})
 )
 
 class ProgramImpl(private val fileNodes: List<FileWithImportsNode>) : Program

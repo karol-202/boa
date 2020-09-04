@@ -24,6 +24,8 @@ object SourcesResolver : Phase<File, List<FileWithImportsNode>>
 			fun withFile(file: File, nodeAndImports: FileNodeAndImports) =
 				copy(files = files + (file to nodeAndImports))
 
+			fun withIssues(issues: List<Issue>) = copy(issues = this.issues + issues)
+
 			fun fail() = Failed(issues)
 		}
 
@@ -40,8 +42,8 @@ object SourcesResolver : Phase<File, List<FileWithImportsNode>>
 	private fun State.processFile(file: File): State = ifProcessing {
 		if(wasFileProcessed(file)) this
 		else FilePipeline.process(file).fold(
-			ifSuccess = { handleProcessedFile(file, it.resolvePaths()) },
-			ifFailure = { fail() }
+			ifSuccess = { withIssues(issues).handleProcessedFile(file, it.resolvePaths(relativeTo = file)) },
+			ifFailure = { withIssues(issues).fail() }
 		)
 	}
 
@@ -64,5 +66,6 @@ object SourcesResolver : Phase<File, List<FileWithImportsNode>>
 
 	private fun State.Processing.requireFileNode(file: File) = files[file]?.fileNode ?: error("File not found")
 
-	private fun ImportsExtractor.FileNodeAndImports.resolvePaths() = FileNodeAndImports(fileNode, imports.map { File(it) })
+	private fun ImportsExtractor.FileNodeAndImports.resolvePaths(relativeTo: File) =
+		FileNodeAndImports(fileNode, imports.map { File(relativeTo.parent, it) })
 }

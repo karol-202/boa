@@ -11,20 +11,22 @@ interface Phase<I, O>
 
 			override fun <NO> flatMap(transform: (O) -> Result<NO>) = transform(value)
 
-			override fun <R> fold(ifSuccess: (O) -> R,
-			                      ifFailure: () -> R) = ifSuccess(value)
+			override fun <R> fold(ifSuccess: Success<O>.(O) -> R,
+			                      ifFailure: Failure.() -> R) = ifSuccess(value)
 		}
 
 		data class Failure(override val issues: List<Issue> = emptyList()) : Result<Nothing>()
 		{
 			override val value get() = null
 
+			constructor(vararg issues: Issue) : this(issues.toList())
+
 			override fun <NO> map(transform: (Nothing) -> NO) = Failure(issues)
 
 			override fun <NO> flatMap(transform: (Nothing) -> Result<NO>) = this
 
-			override fun <R> fold(ifSuccess: (Nothing) -> R,
-			                      ifFailure: () -> R) = ifFailure()
+			override fun <R> fold(ifSuccess: Success<Nothing>.(Nothing) -> R,
+			                      ifFailure: Failure.() -> R) = ifFailure()
 		}
 
 		abstract val value: O?
@@ -34,8 +36,8 @@ interface Phase<I, O>
 
 		abstract fun <NO> flatMap(transform: (O) -> Result<NO>): Result<NO>
 
-		abstract fun <R> fold(ifSuccess: (O) -> R,
-		                      ifFailure: () -> R): R
+		abstract fun <R> fold(ifSuccess: Success<O>.(O) -> R,
+		                      ifFailure: Failure.() -> R): R
 	}
 
 	fun process(input: I): Result<O>

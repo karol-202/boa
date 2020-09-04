@@ -3,7 +3,8 @@ package pl.karol202.boa.interpreter
 import pl.karol202.boa.ast.Node
 import kotlin.reflect.KClass
 
-sealed class InterpreterException(message: String) : RuntimeException(message)
+// Issues related to invalid input data
+sealed class InterpreterException(message: String? = null) : RuntimeException(message)
 {
 	class UnexpectedNode(expected: KClass<out Node>, actual: KClass<out Node>) :
 		InterpreterException("Cannot handle ${actual.simpleName} as: ${expected.simpleName}")
@@ -19,4 +20,10 @@ sealed class InterpreterException(message: String) : RuntimeException(message)
 
 	class IllegalAssignment(identifier: String) :
 		InterpreterException(identifier)
+
+	class VariableAlreadyDeclared(identifier: String) :
+		InterpreterException(identifier)
+
+	class NoRootDependency :
+		InterpreterException()
 }

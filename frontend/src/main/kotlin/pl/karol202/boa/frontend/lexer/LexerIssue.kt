@@ -2,21 +2,21 @@ package pl.karol202.boa.frontend.lexer
 
 import pl.karol202.boa.Issue
 
-sealed class LexerIssue(override val level: Issue.Level,
-                        override val message: String) : Issue
+sealed class LexerIssue(level: Level,
+                        message: String) : Issue(level, message)
 {
-	class IllegalCharacter(char: Char) : LexerIssue(Issue.Level.ERROR,
+	class IllegalCharacter(char: Char) : LexerIssue(Level.ERROR,
 	                                                "Invalid character: $char")
 
-	class UnexpectedCharacter(char: Char) : LexerIssue(Issue.Level.ERROR,
+	class UnexpectedCharacter(char: Char) : LexerIssue(Level.ERROR,
 	                                                   "Unexpected character: $char")
 
-	class InvalidToken(token: String) : LexerIssue(Issue.Level.ERROR,
+	class InvalidToken(token: String) : LexerIssue(Level.ERROR,
 	                                               "Invalid token: $token")
 
-	class InvalidStringLiteral(token: String) : LexerIssue(Issue.Level.ERROR,
+	class InvalidStringLiteral(token: String) : LexerIssue(Level.ERROR,
 	                                                       "Invalid string literal: $token")
 
-	class InvalidNumberLiteral(token: String) : LexerIssue(Issue.Level.ERROR,
+	class InvalidNumberLiteral(token: String) : LexerIssue(Level.ERROR,
 	                                                       "Invalid number literal: $token")
 }

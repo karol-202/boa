@@ -1,6 +1,7 @@
 package pl.karol202.boa
 
-interface Issue
+open class Issue(private val level: Level,
+                 private val message: String)
 {
 	enum class Level
 	{
@@ -8,6 +9,5 @@ interface Issue
 		ERROR
 	}
 
-	val level: Level
-	val message: String
+	override fun toString() = "${level.name} ${javaClass.name}: $message"
 }

@@ -11,8 +11,7 @@ application {
 
 tasks {
     withType<KotlinCompile> {
-        kotlinOptions.freeCompilerArgs = listOf("-Xopt-in=kotlin.ExperimentalStdlibApi",
-                                                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
+        kotlinOptions.freeCompilerArgs = listOf("-Xopt-in=kotlin.ExperimentalStdlibApi")
     }
     "run"(JavaExec::class) {
         standardInput = System.`in`

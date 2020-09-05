@@ -21,7 +21,8 @@ tasks {
 
 dependencies {
     implementation(project(":frontend"))
-    implementation(project(":backend"))
+    implementation(project(":middleend"))
+    implementation(project(":interpreter"))
 
     implementation("com.github.ajalt:clikt:2.6.0")
 }

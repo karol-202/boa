@@ -1,7 +1,6 @@
 package pl.karol202.boa.interpreter.data
 
 import pl.karol202.boa.ast.Node
-import pl.karol202.boa.interpreter.InterpreterError
 import pl.karol202.boa.interpreter.InterpreterException
 import pl.karol202.boa.interpreter.handler.Handler
 import pl.karol202.boa.interpreter.util.updated
@@ -19,8 +18,8 @@ data class InterpreterContext(val io: IO?,
 
 	infix fun <R> withResult(value: R) = Handler.Result(this, value)
 
-	fun withVariable(name: String, variable: Variable, overwrite: Boolean = false) =
-		if(name !in variables || overwrite) copy(variables = variables + (name to variable))
+	fun withVariable(name: String, variable: Variable) =
+		if(name !in variables) copy(variables = variables + (name to variable))
 		else throw InterpreterException.VariableAlreadyDeclared(name)
 
 	fun withUpdatedVariable(name: String, builder: (Variable) -> Variable) =
@@ -36,5 +35,9 @@ data class InterpreterContext(val io: IO?,
 		InterpreterContext(io = other.io ?: io,
 		                   variables = variables + other.variables)
 
-	fun requireIO() = io ?: throw InterpreterError.NoIO()
+	operator fun minus(other: InterpreterContext) =
+		InterpreterContext(io = io.takeIf { it != other.io },
+		                   variables = variables.filter { (name, variable) -> variable != other.variables[name] })
+
+	fun requireIO() = io ?: error("No IO found")
 }

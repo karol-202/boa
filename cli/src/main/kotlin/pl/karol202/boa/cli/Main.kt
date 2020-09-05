@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
 import pl.karol202.boa.interpreter.Interpreter
+import pl.karol202.boa.middleend.dependency.DependencyResolver
 import pl.karol202.boa.plus
 import java.io.File
 
@@ -15,7 +16,7 @@ object CLI : CliktCommand()
 	                                                                                                canBeDir = false,
 	                                                                                                mustBeReadable = true)
 
-	private val pipeline = SourcesResolver + Interpreter
+	private val pipeline = SourcesResolver + DependencyResolver + Interpreter
 
 	override fun run()
 	{

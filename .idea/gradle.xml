@@ -9,10 +9,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/backend" />
             <option value="$PROJECT_DIR$/cli" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/frontend" />
+            <option value="$PROJECT_DIR$/interpreter" />
+            <option value="$PROJECT_DIR$/middleend" />
           </set>
         </option>
       </GradleProjectSettings>

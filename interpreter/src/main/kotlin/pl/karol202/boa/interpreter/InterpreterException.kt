@@ -3,7 +3,6 @@ package pl.karol202.boa.interpreter
 import pl.karol202.boa.ast.Node
 import kotlin.reflect.KClass
 
-// Issues related to invalid input data
 sealed class InterpreterException(message: String? = null) : RuntimeException(message)
 {
 	class UnexpectedNode(expected: KClass<out Node>, actual: KClass<out Node>) :
@@ -23,7 +22,4 @@ sealed class InterpreterException(message: String? = null) : RuntimeException(me
 
 	class VariableAlreadyDeclared(identifier: String) :
 		InterpreterException(identifier)
-
-	class NoRootDependency :
-		InterpreterException()
 }

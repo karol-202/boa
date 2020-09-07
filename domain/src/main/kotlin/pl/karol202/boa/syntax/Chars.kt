@@ -7,5 +7,5 @@ object Chars
 	const val TAB = '\t'
 	const val EOF = '\u0000'
 
-	val SPECIAL = listOf('+', '-', '*', '/', '%', '=', '&', '|', '!', '<', '>')
+	val SPECIAL = listOf('+', '-', '*', '/', '%', '=', '&', '|', '!', '<', '>', ':')
 }

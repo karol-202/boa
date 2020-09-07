@@ -2,22 +2,58 @@ package pl.karol202.boa.interpreter.program
 
 import pl.karol202.boa.ast.DependencyNode
 import pl.karol202.boa.ast.FileNode
-import pl.karol202.boa.interpreter.data.BuiltinInvocable
 import pl.karol202.boa.interpreter.data.InterpreterContext
 import pl.karol202.boa.interpreter.data.Variable
 import pl.karol202.boa.interpreter.handler.FileHandler
-import pl.karol202.boa.syntax.VariableType
+import pl.karol202.boa.interpreter.value.BuiltinFunctionValue
+import pl.karol202.boa.interpreter.value.StringValue
+import pl.karol202.boa.interpreter.value.TypeValue
+import pl.karol202.boa.syntax.VariableMutability
+import pl.karol202.boa.type.*
 import java.io.InputStream
 import java.io.OutputStream
 
-private val DEFAULT_VARIABLES = mapOf(
-	"printLine" to Variable(VariableType.IMMUTABLE, BuiltinInvocable { args ->
-		requireIO().output.writer().run {
-			appendLine(args[0].toString())
-			flush()
-		}
-	})
-)
+private val DEFAULT_CONTEXT = InterpreterContext()
+	.withVariable("Void", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(VoidType)
+	))
+	.withVariable("Bool", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(BoolType)
+	))
+	.withVariable("Int", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(IntType)
+	))
+	.withVariable("Real", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(RealType)
+	))
+	.withVariable("String", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(StringType)
+	))
+	.withVariable("Type", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(TypeType)
+	))
+	.withVariable("printLine", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = FunctionType(argumentTypes = listOf(StringType),
+		                    returnType = VoidType),
+		value = BuiltinFunctionValue.void(argumentTypes = listOf(StringType)) { args ->
+			requireIO().output.writer().run {
+				appendLine((args[0] as StringValue).value)
+				flush()
+			}
+		}))
 
 class ProgramImpl(private val rootDependency: DependencyNode) : Program
 {
@@ -31,6 +67,7 @@ class ProgramImpl(private val rootDependency: DependencyNode) : Program
 		fun withFileDeltaContextAddedToCurrentContext(fileNode: FileNode) =
 			copy(currentContext = currentContext + requireFileDeltaContext(fileNode))
 
+		// TODO Raise error in case of conflict between nodes
 		fun withFilesDeltaContextsAddedToCurrentContext(fileNodes: List<FileNode>) =
 			fileNodes.fold(this) { state, node -> state.withFileDeltaContextAddedToCurrentContext(node) }
 
@@ -41,8 +78,8 @@ class ProgramImpl(private val rootDependency: DependencyNode) : Program
 
 	override fun execute(input: InputStream, output: OutputStream)
 	{
-		val io = InterpreterContext.IO(input, output)
-		val baseContext = InterpreterContext(io, DEFAULT_VARIABLES)
+		val ioContext = InterpreterContext().withIO(InterpreterContext.IO(input, output))
+		val baseContext = DEFAULT_CONTEXT + ioContext
 		State(baseContext).executeDependency(rootDependency)
 	}
 

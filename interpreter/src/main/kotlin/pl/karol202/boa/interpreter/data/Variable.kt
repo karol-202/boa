@@ -1,9 +1,12 @@
 package pl.karol202.boa.interpreter.data
 
-import pl.karol202.boa.syntax.VariableType
+import pl.karol202.boa.type.Type
+import pl.karol202.boa.interpreter.value.Value
+import pl.karol202.boa.syntax.VariableMutability
 
-data class Variable(val type: VariableType,
-                    val value: Any)
+data class Variable(val mutability: VariableMutability,
+                    val type: Type,
+                    val value: Value)
 {
-	fun withValue(value: Any) = copy(value = value)
+	fun withValue(value: Value) = copy(value = value)
 }

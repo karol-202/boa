@@ -5,22 +5,27 @@ Boa - my own programming language created for fun
 
 ### Variable declaration
 ```
-let|var identifier = expression
+let|var IDENTIFIER[: IDENTIFIER] = EXPRESSION
 ```
 
 ### Invocation
 ```
-identifier([expression[,expression[...]])
+IDENTIFIER([EXPRESSION[,EXPRESSION[...]])
 ```
 
 ### Assignment
 ```
-identifier = expression
+IDENTIFIER = EXPRESSION
 ```
 
 ### Expression
 ```
-invocation|expression|literal|identifier [operator invocation|expression|literal|identifier]
+INVOCATION|EXPRESSION|LITERAL|IDENTIFIER [OPERATOR INVOCATION|EXPRESSION|LITERAL|IDENTIFIER]
+```
+
+### Import
+```
+import STRING_LITERAL
 ```
 
 More features will be added.

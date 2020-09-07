@@ -5,14 +5,15 @@ import pl.karol202.boa.ast.InvocableNode
 import pl.karol202.boa.ast.OperatorNode
 import pl.karol202.boa.interpreter.InterpreterException
 import pl.karol202.boa.interpreter.data.InterpreterContext
-import pl.karol202.boa.interpreter.data.Invocable
+import pl.karol202.boa.interpreter.value.FunctionValue
+import pl.karol202.boa.type.FunctionType
 
-object InvocableHandler : Handler<InvocableNode, Invocable>
+object InvocableHandler : Handler<InvocableNode, FunctionValue>
 {
 	override fun InterpreterContext.handle(node: InvocableNode) = when(node)
 	{
 		is ExpressionNode -> handle(ExpressionHandler, node) then { value ->
-			if(value !is Invocable) throw InterpreterException.TypeError(Invocable::class, value::class)
+			if(value !is FunctionValue) throw InterpreterException.CannotInvoke(value.type)
 			else withResult(value)
 		}
 		is OperatorNode -> handle(OperatorHandler, node) then { withResult(it) }

@@ -1,6 +1,6 @@
 package pl.karol202.boa.syntax
 
-enum class VariableType
+enum class VariableMutability
 {
 	IMMUTABLE,
 	MUTABLE;

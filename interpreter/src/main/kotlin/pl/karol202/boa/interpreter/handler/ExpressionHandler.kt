@@ -6,8 +6,9 @@ import pl.karol202.boa.ast.InvocationNode
 import pl.karol202.boa.ast.LiteralNode
 import pl.karol202.boa.interpreter.InterpreterException
 import pl.karol202.boa.interpreter.data.InterpreterContext
+import pl.karol202.boa.interpreter.value.Value
 
-object ExpressionHandler : Handler<ExpressionNode, Any>
+object ExpressionHandler : Handler<ExpressionNode, Value>
 {
 	override fun InterpreterContext.handle(node: ExpressionNode) = when(node)
 	{

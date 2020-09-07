@@ -1,21 +1,19 @@
 package pl.karol202.boa.interpreter.handler
 
 import pl.karol202.boa.ast.OperatorNode
+import pl.karol202.boa.interpreter.InterpreterException
 import pl.karol202.boa.interpreter.data.InterpreterContext
-import pl.karol202.boa.interpreter.data.Invocable
-import pl.karol202.boa.interpreter.data.BuiltinInvocable
+import pl.karol202.boa.interpreter.value.BuiltinFunctionValue
+import pl.karol202.boa.interpreter.value.FunctionValue
 import pl.karol202.boa.syntax.OperatorType
+import pl.karol202.boa.type.AnyType
+import pl.karol202.boa.type.IntType
 
-object OperatorHandler : Handler<OperatorNode, Invocable>
+object OperatorHandler : Handler<OperatorNode, FunctionValue>
 {
-	override fun InterpreterContext.handle(node: OperatorNode) = withResult(BuiltinInvocable { args ->
-		when(node.type)
-		{
-			// TODO Rewrite when the type system is ready
-			OperatorType.UNARY_PLUS -> args[0]
-			OperatorType.UNARY_MINUS -> -(args[0] as Int)
-			OperatorType.PLUS -> (args[0] as Int) + (args[1] as Int)
-			OperatorType.MINUS -> (args[0] as Int) - (args[1] as Int)
-		}
-	})
+	override fun InterpreterContext.handle(node: OperatorNode) =
+		withResult(BuiltinFunctionValue(argumentTypes = listOf(AnyType, AnyType),
+		                                returnType = AnyType) {
+			throw InterpreterException.NotImplemented("Operators")
+		})
 }

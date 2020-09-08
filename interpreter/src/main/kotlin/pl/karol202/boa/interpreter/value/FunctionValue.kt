@@ -2,7 +2,11 @@ package pl.karol202.boa.interpreter.value
 
 import pl.karol202.boa.interpreter.InterpreterException
 import pl.karol202.boa.interpreter.data.InterpreterContext
+import pl.karol202.boa.interpreter.data.MemberLocation
+import pl.karol202.boa.interpreter.data.Variable
+import pl.karol202.boa.syntax.VariableMutability
 import pl.karol202.boa.type.FunctionType
+import pl.karol202.boa.type.StringType
 import pl.karol202.boa.type.Type
 import pl.karol202.boa.type.VoidType
 
@@ -11,7 +15,9 @@ interface FunctionValue : Value
 	fun invoke(context: InterpreterContext, args: List<Value>): Value
 }
 
-class BuiltinFunctionValue(private val argumentTypes: List<Type>,
+fun FunctionValue.invoke(context: InterpreterContext, vararg args: Value) = invoke(context, args.toList())
+
+class BuiltinFunctionValue(private val parameterTypes: List<Type>,
                            private val returnType: Type,
                            private val function: InterpreterContext.(List<Value>) -> Value) : FunctionValue
 {
@@ -24,7 +30,20 @@ class BuiltinFunctionValue(private val argumentTypes: List<Type>,
 			}
 	}
 
-	override val type get() = FunctionType(argumentTypes, returnType)
+	override val type get() = FunctionType(parameterTypes, returnType)
+	override val members get() = mapOf<MemberLocation, Variable>(
+		MemberLocation.Name("toString") to Variable(
+			mutability = VariableMutability.IMMUTABLE,
+			type = FunctionType(
+				parameterTypes = emptyList(),
+				returnType = StringType
+			),
+			value = BuiltinFunctionValue(
+				parameterTypes = emptyList(),
+				returnType = StringType
+			) { StringValue(type.displayName) }
+		)
+	)
 
 	override fun invoke(context: InterpreterContext, args: List<Value>): Value
 	{
@@ -36,14 +55,14 @@ class BuiltinFunctionValue(private val argumentTypes: List<Type>,
 
 	private fun checkArgumentsTypes(args: List<Value>)
 	{
-		if(args.size != argumentTypes.size) throw InterpreterException.ArgumentsCountMismatch(argumentTypes.size, args.size)
-		args.map { it.type }.zip(argumentTypes).forEach { (act, exp) ->
-			if(!act.isAssignableTo(exp)) throw InterpreterException.TypeError(exp, act)
-		}
+		val argumentTypes = args.map { it.type }
+		val amountMatches = args.size == parameterTypes.size
+		val typesMatches = argumentTypes.zip(parameterTypes).all { (act, exp) -> act.isAssignableTo(exp) }
+		if(!amountMatches || !typesMatches) throw InterpreterException.ArgumentsMismatch(parameterTypes, argumentTypes)
 	}
 
 	private fun checkReturnType(result: Value)
 	{
-		if(result.type != returnType) throw InterpreterException.TypeError(returnType, result.type)
+		if(!result.type.isAssignableTo(returnType)) throw InterpreterException.TypeError(returnType, result.type)
 	}
 }

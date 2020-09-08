@@ -52,7 +52,7 @@ class InterpreterContext private constructor(private val io: IO?,
 
 	fun withIO(io: IO) = copy(io = io)
 
-	fun requireVariableValue(name: String) = variables[name]?.value ?: throw InterpreterException.UnknownIdentifier(name)
+	fun requireVariableValue(name: String) = variables[name]?.value ?: throw InterpreterException.VariableNotFound(name)
 
 	private fun copy(io: IO? = null,
 	                 variables: Map<String, Variable>? = null) =

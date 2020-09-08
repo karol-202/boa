@@ -5,15 +5,18 @@ import pl.karol202.boa.ast.FileNode
 import pl.karol202.boa.interpreter.data.InterpreterContext
 import pl.karol202.boa.interpreter.data.Variable
 import pl.karol202.boa.interpreter.handler.FileHandler
-import pl.karol202.boa.interpreter.value.BuiltinFunctionValue
-import pl.karol202.boa.interpreter.value.StringValue
-import pl.karol202.boa.interpreter.value.TypeValue
+import pl.karol202.boa.interpreter.value.*
 import pl.karol202.boa.syntax.VariableMutability
 import pl.karol202.boa.type.*
 import java.io.InputStream
 import java.io.OutputStream
 
 private val DEFAULT_CONTEXT = InterpreterContext()
+	.withVariable("Any", Variable(
+		mutability = VariableMutability.IMMUTABLE,
+		type = TypeType,
+		value = TypeValue(AnyType)
+	))
 	.withVariable("Void", Variable(
 		mutability = VariableMutability.IMMUTABLE,
 		type = TypeType,
@@ -46,11 +49,11 @@ private val DEFAULT_CONTEXT = InterpreterContext()
 	))
 	.withVariable("printLine", Variable(
 		mutability = VariableMutability.IMMUTABLE,
-		type = FunctionType(argumentTypes = listOf(StringType),
+		type = FunctionType(parameterTypes = listOf(AnyType),
 		                    returnType = VoidType),
-		value = BuiltinFunctionValue.void(argumentTypes = listOf(StringType)) { args ->
+		value = BuiltinFunctionValue.void(argumentTypes = listOf(AnyType)) { args ->
 			requireIO().output.writer().run {
-				appendLine((args[0] as StringValue).value)
+				appendLine(args[0].toStringFunction.invoke(this@void).requireToBe<StringValue>(StringType).value)
 				flush()
 			}
 		}))

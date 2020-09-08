@@ -1,12 +1,14 @@
 package pl.karol202.boa.interpreter
 
 import pl.karol202.boa.ast.Node
+import pl.karol202.boa.interpreter.data.MemberLocation
+import pl.karol202.boa.syntax.OperatorType
 import pl.karol202.boa.type.Type
 import kotlin.reflect.KClass
 
 sealed class InterpreterException(message: String? = null) : RuntimeException(message)
 {
-	class NotImplemented(message: String) :
+	class NotSupported(message: String) :
 		InterpreterException(message)
 
 	class UnexpectedNode(expected: KClass<out Node>, actual: KClass<out Node>) :
@@ -15,11 +17,11 @@ sealed class InterpreterException(message: String? = null) : RuntimeException(me
 	class TypeError(expected: Type, actual: Type) :
 		InterpreterException("Expected: ${expected.displayName}, actual: ${actual.displayName}")
 
-	class UnknownIdentifier(identifier: String) :
+	class VariableNotFound(identifier: String) :
 		InterpreterException(identifier)
 
-	class ImportNotSupported :
-		InterpreterException("Imports should be resolved in middleend level")
+	class MemberNotFound(location: MemberLocation) :
+		InterpreterException(location.toString())
 
 	class IllegalAssignment(name: String) :
 		InterpreterException(name)
@@ -27,9 +29,9 @@ sealed class InterpreterException(message: String? = null) : RuntimeException(me
 	class VariableAlreadyDeclared(name: String) :
 		InterpreterException(name)
 
-	class ArgumentsCountMismatch(expected: Int, actual: Int) :
-		InterpreterException("Expected $expected arguments, got: $actual")
-
 	class CannotInvoke(type: Type) :
 		InterpreterException("Cannot invoke: $type")
+
+	class ArgumentsMismatch(expected: List<Type>, actual: List<Type>) :
+		InterpreterException("Expected (${expected.joinToString()}) arguments, got: (${actual.joinToString()})")
 }

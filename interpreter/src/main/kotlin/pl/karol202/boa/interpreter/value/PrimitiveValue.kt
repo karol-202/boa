@@ -19,7 +19,7 @@ object VoidValue : PrimitiveValue(
 	)
 )
 
-class BoolValue(val value: Boolean) : PrimitiveValue(
+data class BoolValue(val value: Boolean) : PrimitiveValue(
 	type = BoolType,
 	members = mapOf(
 		MemberLocation.Name("toString") to builtinFunctionVariable(parameterTypes = emptyList(),
@@ -29,7 +29,7 @@ class BoolValue(val value: Boolean) : PrimitiveValue(
 	)
 )
 
-class IntValue(val value: Int) : PrimitiveValue(
+data class IntValue(val value: Int) : PrimitiveValue(
 	type = IntType,
 	members = mapOf(
 		MemberLocation.Name("toString") to builtinFunctionVariable(parameterTypes = emptyList(),
@@ -44,7 +44,7 @@ class IntValue(val value: Int) : PrimitiveValue(
 	)
 )
 
-class RealValue(val value: Double) : PrimitiveValue(
+data class RealValue(val value: Double) : PrimitiveValue(
 	type = RealType,
 	members = mapOf(
 		MemberLocation.Name("toString") to builtinFunctionVariable(parameterTypes = emptyList(),
@@ -59,27 +59,22 @@ class RealValue(val value: Double) : PrimitiveValue(
 	)
 )
 
-class StringValue(val value: String) : PrimitiveValue(
+data class StringValue(val value: String) : PrimitiveValue(
 	type = StringType,
 	members = mapOf(
 		MemberLocation.Name("toString") to builtinFunctionVariable(parameterTypes = emptyList(),
 		                                                           returnType = StringType) {
 			StringValue(value)
 		},
-		MemberLocation.Operator(OperatorType.PLUS) to builtinFunctionVariable(parameterTypes = listOf(StringType),
-		                                                                      returnType = StringType) { args ->
-			val operand = (args[0] as StringValue).value
-			StringValue(value + operand)
-		},
 		MemberLocation.Operator(OperatorType.PLUS) to builtinFunctionVariable(parameterTypes = listOf(AnyType),
 		                                                                      returnType = StringType) { args ->
 			val operand = args[0].toStringFunction.invoke(this).requireToBe<StringValue>(StringType).value
 			StringValue(value + operand)
-		}
+		},
 	),
 )
 
-class TypeValue(val value: Type) : PrimitiveValue(
+data class TypeValue(val value: Type) : PrimitiveValue(
 	type = TypeType,
 	members = mapOf(
 		MemberLocation.Name("toString") to builtinFunctionVariable(parameterTypes = emptyList(),

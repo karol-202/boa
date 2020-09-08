@@ -7,7 +7,9 @@ enum class OperatorType(val symbol: String,
 	UNARY_MINUS("-", Position.UNARY_BEFORE),
 
 	PLUS("+", Position.BINARY),
-	MINUS("-", Position.BINARY);
+	MINUS("-", Position.BINARY),
+
+	EQUAL("===", Position.BINARY);
 
 	enum class Position
 	{

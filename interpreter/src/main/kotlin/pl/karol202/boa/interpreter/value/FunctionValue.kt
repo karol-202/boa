@@ -32,17 +32,10 @@ class BuiltinFunctionValue(private val parameterTypes: List<Type>,
 
 	override val type get() = FunctionType(parameterTypes, returnType)
 	override val members get() = mapOf<MemberLocation, Variable>(
-		MemberLocation.Name("toString") to Variable(
-			mutability = VariableMutability.IMMUTABLE,
-			type = FunctionType(
-				parameterTypes = emptyList(),
-				returnType = StringType
-			),
-			value = BuiltinFunctionValue(
-				parameterTypes = emptyList(),
-				returnType = StringType
-			) { StringValue(type.displayName) }
-		)
+		MemberLocation.Name("toString") to builtinFunctionVariable(
+			parameterTypes = emptyList(),
+			returnType = StringType
+		) { StringValue(type.displayName) }
 	)
 
 	override fun invoke(context: InterpreterContext, args: List<Value>): Value

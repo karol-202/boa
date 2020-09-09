@@ -28,6 +28,21 @@ INVOCATION|EXPRESSION|LITERAL|IDENTIFIER [OPERATOR INVOCATION|EXPRESSION|LITERAL
 import STRING_LITERAL
 ```
 
+### If statement
+```
+if(EXPRESSION)
+    STATEMENT
+[else if(EXPRESSION)
+    STATEMENT
+]
+[else STATEMENT]
+```
+
+### Statement
+```
+IMPORT|VARIABLE|ASSIGNMENT|IF|EXPRESSION
+```
+
 More features will be added.
 
 ## Implementation stages:

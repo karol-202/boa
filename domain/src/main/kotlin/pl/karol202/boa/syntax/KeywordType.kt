@@ -4,7 +4,9 @@ enum class KeywordType(val symbol: String)
 {
 	IMPORT("import"),
 	LET("let"),
-	VAR("var");
+	VAR("var"),
+	IF("if"),
+	ELSE("else");
 
 	companion object
 	{

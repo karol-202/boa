@@ -7,6 +7,7 @@ object StatementSyntax : AbstractSyntax<StatementNode>()
 	override fun SyntaxScope.syntax() =
 		either<StatementNode> {
 			+ syntax(ImportSyntax).just()
+			+ syntax(IfSyntax).just()
 			+ syntax(VariableSyntax).just()
 			+ syntax(AssignmentSyntax).just()
 			+ syntax(ExpressionSyntax).just()

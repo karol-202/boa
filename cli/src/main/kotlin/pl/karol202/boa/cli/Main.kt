@@ -21,6 +21,7 @@ object CLI : CliktCommand()
 	override fun run()
 	{
 		val result = pipeline.process(sourceFile)
+		println("----------")
 		result.fold(
 			ifSuccess = { it.execute(System.`in`, System.out) },
 			ifFailure = { println(result) }

@@ -47,16 +47,18 @@ private val DEFAULT_CONTEXT = InterpreterContext()
 		type = TypeType,
 		value = TypeValue(TypeType)
 	))
-	.withVariable("printLine", Variable(
-		mutability = VariableMutability.IMMUTABLE,
-		type = FunctionType(parameterTypes = listOf(AnyType),
-		                    returnType = VoidType),
-		value = BuiltinFunctionValue.void(argumentTypes = listOf(AnyType)) { args ->
-			requireIO().output.writer().run {
-				appendLine(args[0].toStringFunction.invoke(this@void).requireToBe<StringValue>(StringType).value)
-				flush()
-			}
-		}))
+	.withVariable("readLine", builtinFunctionVariable(parameterTypes = emptyList(),
+	                                                  returnType = StringType) {
+		StringValue(requireIO().input.bufferedReader().readLine())
+	})
+	.withVariable("printLine", builtinFunctionVariable(parameterTypes = listOf(AnyType),
+                                                        returnType = VoidType) { args ->
+		requireIO().output.writer().let {
+			it.appendLine(args[0].toStringFunction.invoke(this).requireToBe<StringValue>(StringType).value)
+			it.flush()
+		}
+		VoidValue
+	})
 
 class ProgramImpl(private val rootDependency: DependencyNode) : Program
 {

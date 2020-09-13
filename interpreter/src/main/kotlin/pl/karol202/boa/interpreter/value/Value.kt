@@ -3,6 +3,7 @@ package pl.karol202.boa.interpreter.value
 import pl.karol202.boa.interpreter.InterpreterException
 import pl.karol202.boa.interpreter.data.MemberLocation
 import pl.karol202.boa.interpreter.data.Variable
+import pl.karol202.boa.interpreter.value.function.FunctionValue
 import pl.karol202.boa.type.Type
 
 interface Value

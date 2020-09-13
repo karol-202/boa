@@ -4,6 +4,9 @@ import pl.karol202.boa.ast.OperatorNode
 import pl.karol202.boa.interpreter.data.InterpreterContext
 import pl.karol202.boa.interpreter.data.MemberLocation
 import pl.karol202.boa.interpreter.value.*
+import pl.karol202.boa.interpreter.value.function.BuiltinFunctionValue
+import pl.karol202.boa.interpreter.value.function.FunctionValue
+import pl.karol202.boa.interpreter.value.function.invoke
 import pl.karol202.boa.syntax.OperatorType
 import pl.karol202.boa.type.AnyType
 

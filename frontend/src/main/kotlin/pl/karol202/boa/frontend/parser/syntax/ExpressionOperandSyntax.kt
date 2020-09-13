@@ -6,6 +6,7 @@ object ExpressionOperandSyntax : AbstractSyntax<ExpressionNode>()
 {
 	override fun SyntaxScope.syntax() =
 		either<ExpressionNode> {
+			+ syntax(LambdaSyntax).just()
 			+ syntax(InvocationSyntax).just()
 			+ syntax(ParenthesisExpressionSyntax).just()
 			+ syntax(OperatorExpressionRestSyntax.unary()).just()

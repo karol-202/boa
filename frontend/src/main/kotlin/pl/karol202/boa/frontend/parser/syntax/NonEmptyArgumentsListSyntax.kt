@@ -6,14 +6,14 @@ import pl.karol202.boa.frontend.lexer.Token
 object NonEmptyArgumentsListSyntax : AbstractSyntax<ArgumentsListNode>()
 {
 	override fun SyntaxScope.syntax() =
-		syntax(ExpressionSyntax).then { firstParameter ->
+		syntax(ExpressionSyntax).then { firstArgument ->
 			either<ArgumentsListNode> {
 				+ token<Token.Comma>().then {
 					syntax(NonEmptyArgumentsListSyntax).then { rest ->
-						ArgumentsListNode(firstParameter, *rest.list.toTypedArray()).finish()
+						ArgumentsListNode(firstArgument, *rest.list.toTypedArray()).finish()
 					}
 				}
-				+ ArgumentsListNode(firstParameter).finish()
+				+ ArgumentsListNode(firstArgument).finish()
 			}
 		}
 }

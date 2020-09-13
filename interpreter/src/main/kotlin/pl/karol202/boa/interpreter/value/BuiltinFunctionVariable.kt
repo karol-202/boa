@@ -2,6 +2,7 @@ package pl.karol202.boa.interpreter.value
 
 import pl.karol202.boa.interpreter.data.InterpreterContext
 import pl.karol202.boa.interpreter.data.Variable
+import pl.karol202.boa.interpreter.value.function.BuiltinFunctionValue
 import pl.karol202.boa.syntax.VariableMutability
 import pl.karol202.boa.type.FunctionType
 import pl.karol202.boa.type.Type

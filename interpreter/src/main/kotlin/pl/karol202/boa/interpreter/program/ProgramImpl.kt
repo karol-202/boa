@@ -6,6 +6,7 @@ import pl.karol202.boa.interpreter.data.InterpreterContext
 import pl.karol202.boa.interpreter.data.Variable
 import pl.karol202.boa.interpreter.handler.FileHandler
 import pl.karol202.boa.interpreter.value.*
+import pl.karol202.boa.interpreter.value.function.invoke
 import pl.karol202.boa.syntax.VariableMutability
 import pl.karol202.boa.type.*
 import java.io.InputStream

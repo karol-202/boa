@@ -8,6 +8,8 @@ enum class OperatorType(val symbol: String,
 
 	PLUS("+", Position.BINARY),
 	MINUS("-", Position.BINARY),
+	TIMES("*", Position.BINARY),
+	DIV("/", Position.BINARY),
 
 	EQUAL("===", Position.BINARY);
 

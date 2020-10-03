@@ -48,11 +48,6 @@ object Lexer : Phase<String, List<Token>>
 			matchChar = { it == '/' || it == '*' },
 			action = append
 		)
-		+ LexerRule.onPendingToken(
-			matchToken = { isCommentStartMarker },
-			action = appendAndFinishInvalid
-					then issue { char -> LexerIssue.UnexpectedCharacter(char) }
-		)
 		+ LexerRule.simple(
 			matchChar = { it == '/' },
 			action = ifTokenPending { finishWithPossibleIssue { token -> interpretPendingToken(token) } }

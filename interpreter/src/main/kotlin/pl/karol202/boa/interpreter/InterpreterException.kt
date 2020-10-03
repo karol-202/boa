@@ -33,5 +33,5 @@ sealed class InterpreterException(message: String? = null) : RuntimeException(me
 		InterpreterException("Cannot invoke: $type")
 
 	class ArgumentsMismatch(expected: List<Type>, actual: List<Type>) :
-		InterpreterException("Expected (${expected.joinToString()}) arguments, got: (${actual.joinToString()})")
+		InterpreterException("Expected (${expected.joinToString()}), got: (${actual.joinToString()})")
 }

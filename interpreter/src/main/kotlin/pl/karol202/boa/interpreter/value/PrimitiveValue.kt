@@ -36,10 +36,33 @@ data class IntValue(val value: Int) : PrimitiveValue(
 		                                                           returnType = StringType) {
 			StringValue(value.toString())
 		},
+		MemberLocation.Operator(OperatorType.UNARY_PLUS) to builtinFunctionVariable(parameterTypes = listOf(),
+		                                                                            returnType = IntType) {
+			IntValue(value)
+		},
+		MemberLocation.Operator(OperatorType.UNARY_MINUS) to builtinFunctionVariable(parameterTypes = listOf(),
+		                                                                             returnType = IntType) {
+			IntValue(-value)
+		},
 		MemberLocation.Operator(OperatorType.PLUS) to builtinFunctionVariable(parameterTypes = listOf(IntType),
 		                                                                      returnType = IntType) { args ->
 			val operand = (args[0] as IntValue).value
 			IntValue(value + operand)
+		},
+		MemberLocation.Operator(OperatorType.MINUS) to builtinFunctionVariable(parameterTypes = listOf(IntType),
+		                                                                       returnType = IntType) { args ->
+			val operand = (args[0] as IntValue).value
+			IntValue(value - operand)
+		},
+		MemberLocation.Operator(OperatorType.TIMES) to builtinFunctionVariable(parameterTypes = listOf(IntType),
+		                                                                       returnType = IntType) { args ->
+			val operand = (args[0] as IntValue).value
+			IntValue(value * operand)
+		},
+		MemberLocation.Operator(OperatorType.DIV) to builtinFunctionVariable(parameterTypes = listOf(IntType),
+		                                                                     returnType = IntType) { args ->
+			val operand = (args[0] as IntValue).value
+			IntValue(value / operand)
 		}
 	)
 )
@@ -51,11 +74,34 @@ data class RealValue(val value: Double) : PrimitiveValue(
 		                                                           returnType = StringType) {
 			StringValue(value.toString())
 		},
+		MemberLocation.Operator(OperatorType.UNARY_PLUS) to builtinFunctionVariable(parameterTypes = listOf(),
+		                                                                            returnType = RealType) {
+			RealValue(value)
+		},
+		MemberLocation.Operator(OperatorType.UNARY_MINUS) to builtinFunctionVariable(parameterTypes = listOf(),
+		                                                                             returnType = RealType) {
+			RealValue(-value)
+		},
 		MemberLocation.Operator(OperatorType.PLUS) to builtinFunctionVariable(parameterTypes = listOf(RealType),
 		                                                                      returnType = RealType) { args ->
 			val operand = (args[0] as RealValue).value
 			RealValue(value + operand)
-		}
+		},
+		MemberLocation.Operator(OperatorType.MINUS) to builtinFunctionVariable(parameterTypes = listOf(RealType),
+		                                                                      returnType = RealType) { args ->
+			val operand = (args[0] as RealValue).value
+			RealValue(value - operand)
+		},
+		MemberLocation.Operator(OperatorType.TIMES) to builtinFunctionVariable(parameterTypes = listOf(RealType),
+		                                                                      returnType = RealType) { args ->
+			val operand = (args[0] as RealValue).value
+			RealValue(value * operand)
+		},
+		MemberLocation.Operator(OperatorType.DIV) to builtinFunctionVariable(parameterTypes = listOf(RealType),
+		                                                                      returnType = RealType) { args ->
+			val operand = (args[0] as RealValue).value
+			RealValue(value / operand)
+		},
 	)
 )
 

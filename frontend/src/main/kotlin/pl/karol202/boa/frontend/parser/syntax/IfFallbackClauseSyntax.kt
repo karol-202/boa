@@ -11,14 +11,14 @@ object IfFallbackClauseSyntax : AbstractSyntax<IfNode.Clause.Fallback>()
 		token<Token.Keyword>() matching { it.type == KeywordType.ELSE } then {
 			syntax(OptionalNewlinesSyntax) then {
 				either<IfNode.Clause.Fallback> {
-					+token<Token.Block.Open>().then {
+					+ token<Token.Block.Open>().then {
 						syntax(StatementSequenceSyntax) then { statementSequence ->
 							token<Token.Block.Close>() then {
 								IfNode.Clause.Fallback(statementSequence).finish()
 							}
 						}
 					}
-					+syntax(StatementSyntax).then { statement ->
+					+ syntax(StatementSyntax).then { statement ->
 						IfNode.Clause.Fallback(StatementSequenceNode(statement)).finish()
 					}
 				}

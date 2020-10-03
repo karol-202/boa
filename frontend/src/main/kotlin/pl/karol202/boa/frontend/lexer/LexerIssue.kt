@@ -8,9 +8,6 @@ sealed class LexerIssue(level: Level,
 	class IllegalCharacter(char: Char) : LexerIssue(Level.ERROR,
 	                                                "Invalid character: $char")
 
-	class UnexpectedCharacter(char: Char) : LexerIssue(Level.ERROR,
-	                                                   "Unexpected character: $char")
-
 	class InvalidToken(token: String) : LexerIssue(Level.ERROR,
 	                                               "Invalid token: $token")
 

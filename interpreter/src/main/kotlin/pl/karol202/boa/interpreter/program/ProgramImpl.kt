@@ -3,6 +3,7 @@ package pl.karol202.boa.interpreter.program
 import pl.karol202.boa.ast.DependencyNode
 import pl.karol202.boa.ast.FileNode
 import pl.karol202.boa.interpreter.data.InterpreterContext
+import pl.karol202.boa.interpreter.data.MemberLocation
 import pl.karol202.boa.interpreter.data.Variable
 import pl.karol202.boa.interpreter.handler.FileHandler
 import pl.karol202.boa.interpreter.value.*
@@ -10,6 +11,7 @@ import pl.karol202.boa.syntax.VariableMutability
 import pl.karol202.boa.type.*
 import java.io.InputStream
 import java.io.OutputStream
+import kotlin.math.sqrt
 
 private val DEFAULT_CONTEXT = InterpreterContext()
 	.withVariable("Any", Variable(
@@ -58,6 +60,18 @@ private val DEFAULT_CONTEXT = InterpreterContext()
 			it.flush()
 		}
 		VoidValue
+	})
+	.withVariable("parseInt", builtinFunctionVariable(parameterTypes = listOf(StringType),
+	                                                  returnType = IntType) { args ->
+		IntValue(args[0].requireToBe<StringValue>(StringType).value.toInt())
+	})
+	.withVariable("parseReal", builtinFunctionVariable(parameterTypes = listOf(StringType),
+	                                                   returnType = RealType) { args ->
+		RealValue(args[0].requireToBe<StringValue>(StringType).value.toDouble())
+	})
+	.withVariable("sqrt", builtinFunctionVariable(parameterTypes = listOf(RealType),
+	                                              returnType = RealType) { args ->
+		RealValue(sqrt(args[0].requireToBe<RealValue>(RealType).value))
 	})
 
 class ProgramImpl(private val rootDependency: DependencyNode) : Program
